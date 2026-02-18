@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Studio Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg: #050505;
+            --fg: #f0f0f0;
+            --accent: #00ffa3;
+            --accent-dim: rgba(0, 255, 163, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg);
+            color: var(--fg);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Background Effects */
+        .bg-layer {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background: 
+                radial-gradient(circle at 50% 50%, rgba(0, 255, 163, 0.03) 0%, transparent 50%),
+                linear-gradient(180deg, var(--bg) 0%, #0a0a0a 100%);
+        }
+
+        .grid-pattern {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 80px 80px;
+            mask-image: radial-gradient(ellipse at center, black 20%, transparent 70%);
+        }
+
+        .glow-orb {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 255, 163, 0.15) 0%, transparent 70%);
+            filter: blur(80px);
+            z-index: 1;
+            animation: orbit 15s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes orbit {
+            0%, 100% { transform: translate(-30%, -30%); }
+            50% { transform: translate(30%, 30%); }
+        }
+
+        /* Main Content */
+        .container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 2rem;
+            max-width: 480px;
+            animation: fadeUp 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo-box {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 2rem;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-spin {
+            position: absolute;
+            inset: 0;
+            border: 2px solid transparent;
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 3s linear infinite;
+        }
+
+        .logo-spin:nth-child(2) {
+            inset: 10px;
+            border-top-color: transparent;
+            border-right-color: var(--accent);
+            animation-duration: 4s;
+            animation-direction: reverse;
+            opacity: 0.5;
+        }
+
+        .logo-inner {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent) 0%, #00cc82 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 40px rgba(0, 255, 163, 0.3);
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, var(--fg), #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        /* Action Button */
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            background: var(--accent);
+            color: #000;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 0 0 0 var(--accent-dim);
+            text-decoration: none;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(0, 255, 163, 0.3);
+        }
+
+        .action-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .action-btn svg {
+            transition: transform 0.2s;
+        }
+
+        .action-btn:hover svg {
+            transform: translateX(4px);
+        }
+
+        /* Timer */
+        .timer-text {
+            margin-top: 1.5rem;
+            font-size: 0.875rem;
+            color: #444;
+        }
+
+        .timer-count {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .title {
+                font-size: 2rem;
+            }
+            .logo-box {
+                width: 80px;
+                height: 80px;
+            }
+            .logo-inner {
+                width: 50px;
+                height: 50px;
+                border-radius: 12px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Elements -->
+    <div class="bg-layer"></div>
+    <div class="grid-pattern"></div>
+    <div class="glow-orb"></div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Logo -->
+        <div class="logo-box">
+            <div class="logo-spin"></div>
+            <div class="logo-spin"></div>
+            <div class="logo-inner">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Text -->
+        <h1 class="title">AI Studio Portal</h1>
+        <p class="subtitle">Google AI Studio ishchi maydoniga kirish</p>
+
+        <!-- Button -->
+        <a href="https://aistudio.google.com/apps/drive/1omW1pdPW51OJoDeYl6cHYXdLjXvnuARD?fullscreenApplet=true&showPreview=true&showAssistant=true" class="action-btn" aria-label="Saytni ochish">
+            Sahifani ochish
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+        </a>
+
+        <!-- Timer -->
+        <p class="timer-text">
+            Avtomatik yo'naltirish: <span class="timer-count" id="timer">5</span> soniya
+        </p>
+    </div>
+
+    <script>
+        // Siz bergan manzil
+        var targetUrl = "https://aistudio.google.com/apps/drive/1omW1pdPW51OJoDeYl6cHYXdLjXvnuARD?fullscreenApplet=true&showPreview=true&showAssistant=true";
+        
+        // Taymer sozlamalari
+        var seconds = 5;
+        var timerEl = document.getElementById('timer');
+        var countdown;
+
+        function startTimer() {
+            countdown = setInterval(function() {
+                seconds--;
+                if (timerEl) {
+                    timerEl.textContent = seconds;
+                }
+                if (seconds <= 0) {
+                    clearInterval(countdown);
+                    window.location.href = targetUrl;
+                }
+            }, 1000);
+        }
+
+        // Sahifa yuklanganda taymerni boshlash
+        startTimer();
+    </script>
+</body>
+</html>
